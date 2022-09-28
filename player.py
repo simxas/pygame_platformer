@@ -12,12 +12,14 @@ class Player(pygame.sprite.Sprite):
     def get_input(self):
         keys = pygame.key.get_pressed()
 
+        #region getting keys
         if keys[pygame.K_RIGHT]:
             self.direction.x = 1
         elif keys[pygame.K_LEFT]:
             self.direction.x = -1
         else:
             self.direction.x = 0
+        #endregion
 
     def update(self):
         self.get_input()
