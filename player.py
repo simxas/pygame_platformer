@@ -50,12 +50,24 @@ class Player(pygame.sprite.Sprite):
             self.image = flipped_image
 
         #region set the rect
-        if self.on_ground:
+        if self.on_ground and self.on_right:
+            self.rect = self.image.get_rect(bottomright=self.rect.bottomright)
+        elif self.on_ground and self.on_left:
+            self.rect = self.image.get_rect(bottomleft=self.rect.bottomleft)
+        elif self.on_ground:
             self.rect = self.image.get_rect(midbottom=self.rect.midbottom)
+        # elif self.on_ceiling:
+        #     self.rect = self.image.get_rect(midtop=self.rect.midtop)
+        # else:
+        #     self.rect = self.image.get_rect(center=self.rect.center)
+        if self.on_ceiling and self.on_right:
+            self.rect = self.image.get_rect(topright=self.rect.topright)
+        elif self.on_ceiling and self.on_left:
+            self.rect = self.image.get_rect(topleft=self.rect.topleft)
         elif self.on_ceiling:
             self.rect = self.image.get_rect(midtop=self.rect.midtop)
         else:
-            self.rect = self.image.get_rect(center=self.rect.center)
+            pass
         #endregion
 
     def get_input(self):
@@ -71,9 +83,8 @@ class Player(pygame.sprite.Sprite):
         else:
             self.direction.x = 0
 
-        if keys[pygame.K_SPACE]:
-            if self.on_ground:
-                self.jump()
+        if keys[pygame.K_SPACE] and self.on_ground:
+            self.jump()
         #endregion
 
     def get_status(self):
