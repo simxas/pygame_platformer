@@ -11,12 +11,20 @@ class Player(pygame.sprite.Sprite):
         # self.image = pygame.Surface((32, 64))
         # self.image.fill('red')
         self.rect = self.image.get_rect(topleft=pos)
+
+        #region dust particles
+        self.import_dust_run_particles()
+        self.frame_index = 0
+        self.animation_speed = 0.15
+        #endregion
+
         #region player movement
         self.direction = pygame.math.Vector2(0, 0)
         self.speed = 8
         self.gravity = 0.8
         self.jump_speed = -16
         #endregion
+
         #region player status
         self.status = 'idle'
         self.facing_right = True
@@ -33,6 +41,9 @@ class Player(pygame.sprite.Sprite):
         for animation in self.animations.keys():
             full_path = character_path + animation
             self.animations[animation] = import_folder(full_path)
+
+    def import_dust_run_particles(self):
+        self.dust_run_particles = import_folder('graphics/character/dust_particles/run')
 
     def animate(self):
         animation = self.animations[self.status]
