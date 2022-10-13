@@ -2,7 +2,7 @@ import pygame
 from support import import_folder
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos):
+    def __init__(self, pos, surface):
         super().__init__()
         self.import_character_assets()
         self.frame_index = 0
@@ -14,8 +14,9 @@ class Player(pygame.sprite.Sprite):
 
         #region dust particles
         self.import_dust_run_particles()
-        self.frame_index = 0
-        self.animation_speed = 0.15
+        self.dust_frame_index = 0
+        self.dust_animation_speed = 0.15
+        self.display_surface = surface
         #endregion
 
         #region player movement
@@ -81,6 +82,17 @@ class Player(pygame.sprite.Sprite):
             pass
         #endregion
 
+    def run_dust_animation(self):
+        if self.status == 'run' and self.on_ground:
+            self.dust_frame_index += self.dust_animation_speed
+            if self.dust_frame_index >= len(self.dust_run_particles):
+                self.dust_frame_index = 0
+            dust_particle = self.dust_run_particles[int(self.dust_frame_index)]
+
+            if self.facing_right:
+                pos = self.rect.bottomleft - pygame.math.Vector2(6, 10)
+                self.display_surface.blit(dust_particle, pos)
+
     def get_input(self):
         keys = pygame.key.get_pressed()
 
@@ -120,3 +132,4 @@ class Player(pygame.sprite.Sprite):
         self.get_input()
         self.get_status()
         self.animate()
+        self.run_dust_animation()
